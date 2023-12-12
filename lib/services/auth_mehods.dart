@@ -1,13 +1,22 @@
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:instanet/model/usermodel.dart';
 import 'package:instanet/storage_method/storage_method.dart';
 
 class AuthMethod {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firetsore = FirebaseFirestore.instance;
+   
+
+   Future<Users> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot documentSnapshot =
+        await _firetsore.collection('user').doc(currentUser.uid).get();
+
+    return Users.fromSnap(documentSnapshot);
+  }
 
   Future<String> singUpuser({
     required String email,
@@ -21,8 +30,8 @@ class AuthMethod {
       if (email.isNotEmpty ||
               password.isNotEmpty ||
               username.isNotEmpty ||
-              bio.isNotEmpty
-          //  file != null
+              bio.isNotEmpty||
+           file != null
           ) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
@@ -30,27 +39,21 @@ class AuthMethod {
         print(cred.user!.uid);
         String photoUrl = await StorageMethods()
             .uploadImageToStorage("profilePics", file, false);
-        await _firetsore.collection('user').doc(cred.user!.uid).set({
-          'username': username,
-          "uid": cred.user!.uid,
-          "email": email,
-          "bio": bio,
-          "followers": [],
-          "following": [],
-          'photoUrl': photoUrl,
-        });
+          
+        Users user=Users(
+          username: username,
+          uid: cred.user!.uid,
+          photoUrl: photoUrl,
+          email: email,
+          bio: bio,
+          followers: [],
+          following: [],
+        );
+
+        await _firetsore.collection('user').doc(cred.user!.uid).set(user.tojson());
         res = "success";
       }
     }
-    // on FirebaseAuthException catch (err) {
-    //   if (err.code == 'invalid-email') {
-    //     res = 'The email is badly formatted.';
-    //   } else {
-    //     if (err.code == 'weak-password') {
-    //       res = 'password should be al least 6 characters';
-    //     }
-    //   }
-    // }
     catch (err) {
       res = err.toString();
     }
@@ -70,18 +73,14 @@ class AuthMethod {
         res = "please enter all the fields";
       } 
     } 
-      //  on FirebaseAuthException catch (err) {
-      // if (err.code == 'user-not-found') {
-      //   res = 'The email is badly formatted.';
-      // } else {
-      //   if (err.code == 'weak-password') {
-      //     res = 'password should be al least 6 characters';
-      //   }
-      // }
-    // }
     catch (err) {
       res = err.toString();
     }
     return res;
+  }
+
+  // singout
+   Future<void> signOut() async {
+    await _auth.signOut();
   }
 }

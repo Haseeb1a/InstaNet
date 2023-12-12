@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instanet/controller/logincontroller.dart';
 import 'package:instanet/helpers/app_colors.dart';
+import 'package:instanet/view/singup_page/singup_screen.dart';
 import 'package:instanet/view/widgets/text_feild_input.dart';
 import 'package:provider/provider.dart';
 
@@ -51,9 +52,12 @@ class LoginScreen extends StatelessWidget {
                 loginController.loginUsers(context);
               },
               child: Container(
-                child: loginController.isloading?Center(child: CircularProgressIndicator(
-                  color: primaryColor,
-                )): const Text('log in'),
+                child: loginController.isloading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                        color: primaryColor,
+                      ))
+                    : const Text('log in'),
                 width: double.infinity,
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(vertical: 12),
@@ -78,7 +82,13 @@ class LoginScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 8),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SingupScreen(),
+                        ));
+                  },
                   child: Container(
                     child: Text(
                       "sign up.",

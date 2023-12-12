@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:instanet/resources/auth_mehods.dart';
-import 'package:instanet/view/demo.dart';
+import 'package:instanet/services/auth_mehods.dart';
+import 'package:instanet/view/bottom_bar/mobile_screen_layout.dart';
 import 'package:instanet/view/widgets/show_snackbar.dart';
 
 class LoginController extends ChangeNotifier {
@@ -33,33 +31,54 @@ class LoginController extends ChangeNotifier {
     return null;
   }
 
+
+  // singupControlers
   void signUpUser(context) async {
     isloading = true;
     notifyListeners();
+
     String res = await AuthMethod().singUpuser(
         email: emailController.text,
         password: passwordController.text,
         username: usercontroller.text,
-        bio: usercontroller.text,
+        bio: biocontroller.text,
         file: image!);
     print(res);
-    isloading = false;
-    notifyListeners();
+    if (res == "success") {
+      isloading = false;
+      emailController.clear;
+      biocontroller.clear;
+      passwordController.clear;
+      notifyListeners();
+    } else {
+      isloading = false;
+      notifyListeners();
+    }
+
     if (res != 'success') {
       showSnackBar(res, context);
     }
   }
-
-  void loginUsers(context) async {
+  //  loginFucntios
+  loginUsers(context) async {
     isloading = true;
     notifyListeners();
     String res = await AuthMethod().loginUser(
         email: emailController.text, password: passwordController.text);
+    print(res);
 
     if (res == "success") {
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: context)=>Demo());
+      isloading = false;
+      notifyListeners();
+      if (context.mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const MobileScreenLayout()),
+        );
+      }
+      emailController.clear();
+      passwordController.clear();
     } else {
-      showSnackBar('res', context);
+      showSnackBar(res, context);
     }
     isloading = false;
     notifyListeners();

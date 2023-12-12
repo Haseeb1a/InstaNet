@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instanet/controller/logincontroller.dart';
 import 'package:instanet/helpers/app_colors.dart';
-import 'package:instanet/resources/auth_mehods.dart';
 import 'package:instanet/view/widgets/text_feild_input.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +12,7 @@ class SingupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginController = Provider.of<LoginController>(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
@@ -62,6 +62,7 @@ class SingupScreen extends StatelessWidget {
               height: 24,
             ),
             TextfeildInput(
+              
               hintText: 'enter your email',
               textInputType: TextInputType.emailAddress,
               textEditingController: loginController.emailController,
@@ -81,7 +82,7 @@ class SingupScreen extends StatelessWidget {
             TextfeildInput(
               hintText: 'enter your bio',
               textInputType: TextInputType.text,
-              isPass: true,
+              // isPass: true,
               textEditingController: loginController.biocontroller,
             ),
             const SizedBox(
@@ -91,21 +92,13 @@ class SingupScreen extends StatelessWidget {
               onTap: () {
                 loginController.signUpUser(context);
               },
-              //  () async {
-              //   String res = await AuthMethod().singUpuser(
-              //     email: loginController.emailController.text,
-              //     password: loginController.passwordController.text,
-              //     username: loginController.usercontroller.text,
-              //     bio: loginController.usercontroller.text,
-              //     file: loginController.image!
-              //   );
-              //   print(res);
-              // },
               child: Container(
                 child: loginController.isloading
-                    ? Center(child: CircularProgressIndicator(
-                      color: primaryColor,
-                    ),)
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      )
                     : const Text('Sing in'),
                 width: double.infinity,
                 alignment: Alignment.center,
