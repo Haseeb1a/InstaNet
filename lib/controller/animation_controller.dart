@@ -17,4 +17,5 @@ class AnimatioinController extends ChangeNotifier {
     isAnimating = false;
     notifyListeners();
   }
+  
 }

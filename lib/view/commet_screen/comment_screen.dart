@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:instanet/controller/feed_controller.dart';
 import 'package:instanet/controller/user_provider.dart';
 import 'package:instanet/helpers/app_colors.dart';
-import 'package:instanet/model/usermodel.dart';
+import 'package:instanet/model/user_model.dart';
 import 'package:instanet/services/firestore_method.dart';
 import 'package:instanet/view/widgets/comment_card.dart';
 import 'package:instanet/view/widgets/show_snackbar.dart';
@@ -32,6 +33,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
       if (res != 'success') {
         if (context.mounted) showSnackBar(res, context);
+
+      }else{
+        Provider.of<FeedController>(context,listen: false).getCommets(context);
       }
       setState(() {
         commentEditingController.text = "";

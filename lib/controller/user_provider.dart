@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:instanet/model/usermodel.dart';
+import 'package:instanet/model/user_model.dart';
 import 'package:instanet/services/auth_mehods.dart';
 
 class UserProvider with ChangeNotifier {

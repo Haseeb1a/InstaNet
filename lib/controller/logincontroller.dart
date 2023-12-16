@@ -59,7 +59,9 @@ class LoginController extends ChangeNotifier {
       showSnackBar(res, context);
     }
   }
-  //  loginFucntios
+
+
+  //  login Fucntios
   loginUsers(context) async {
     isloading = true;
     notifyListeners();
@@ -83,4 +85,5 @@ class LoginController extends ChangeNotifier {
     isloading = false;
     notifyListeners();
   }
+  
 }

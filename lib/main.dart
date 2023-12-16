@@ -1,19 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:instanet/controller/add_controller.dart';
 import 'package:instanet/controller/animation_controller.dart';
 import 'package:instanet/controller/bottombar_contoller.dart';
 import 'package:instanet/controller/comment_controller.dart';
+import 'package:instanet/controller/feed_controller.dart';
 import 'package:instanet/controller/logincontroller.dart';
+import 'package:instanet/controller/profile_controller.dart';
 import 'package:instanet/controller/search_controller.dart';
 import 'package:instanet/controller/user_provider.dart';
 import 'package:instanet/firebase_options.dart';
 import 'package:instanet/helpers/app_colors.dart';
-import 'package:instanet/view/bottom_bar/mobile_screen_layout.dart';
-import 'package:instanet/responcive/responsive_layout.dart';
 import 'package:instanet/view/auth_gates/auth_gates.dart';
-import 'package:instanet/view/login_page/login_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -38,7 +36,9 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => AnimatioinController()),
           ChangeNotifierProvider(create: (context) => CommentController()),
           ChangeNotifierProvider(create: (context) => SearchControllers()),
-          ChangeNotifierProvider(create: (context) => BottomController())
+          ChangeNotifierProvider(create: (context) => BottomController()),
+          ChangeNotifierProvider(create: (context) => FeedController()),
+          ChangeNotifierProvider(create: (context) => ProfileController()),
         ],
         child: MaterialApp(
             title: 'intagram clone',

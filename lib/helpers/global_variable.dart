@@ -5,16 +5,15 @@ import 'package:instanet/view/demo.dart';
 import 'package:instanet/view/feed_screen/feed_screen.dart';
 import 'package:instanet/view/profile_screen/profile_screen.dart';
 import 'package:instanet/view/search_screen/search_screen.dart';
+import 'package:instanet/view/widgets/demolist.dart';
 
 const webScreenSize = 600;
 
 List<Widget> homeScreenItems = [
-   FeedScreen(),
-  //  ProfileScreen(uid: uid),
- 
-  SearchScreen(),
-  AddPostScreen(),
-  Demo(),
+  const FeedScreen(), 
+  const SearchScreen(),
+  const AddPostScreen(),
+  DemoList(),
 
   ProfileScreen(
     uid: FirebaseAuth.instance.currentUser!.uid,
