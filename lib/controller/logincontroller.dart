@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instanet/helpers/image.dart';
 import 'package:instanet/services/auth_mehods.dart';
 import 'package:instanet/view/bottom_bar/mobile_screen_layout.dart';
 import 'package:instanet/view/widgets/show_snackbar.dart';
@@ -31,18 +32,19 @@ class LoginController extends ChangeNotifier {
     return null;
   }
 
-
   // singupControlers
   void signUpUser(context) async {
     isloading = true;
     notifyListeners();
-
+    // if (image!.isEmpty) {
+    //   image = defaultProfile;
+    // }
     String res = await AuthMethod().singUpuser(
         email: emailController.text,
         password: passwordController.text,
         username: usercontroller.text,
         bio: biocontroller.text,
-        file: image!);
+        file: image ?? defaultProfile);
     print(res);
     if (res == "success") {
       isloading = false;
@@ -59,7 +61,6 @@ class LoginController extends ChangeNotifier {
       showSnackBar(res, context);
     }
   }
-
 
   //  login Fucntios
   loginUsers(context) async {
@@ -85,5 +86,4 @@ class LoginController extends ChangeNotifier {
     isloading = false;
     notifyListeners();
   }
-  
 }

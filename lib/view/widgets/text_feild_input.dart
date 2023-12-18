@@ -5,9 +5,10 @@ class TextfeildInput extends StatelessWidget {
   final bool isPass;
   final String hintText;
   final TextInputType textInputType;
+  
   const TextfeildInput(
       {super.key,
-       this.isPass=false,
+      this.isPass = false,
       required this.hintText,
       required this.textInputType,
       required this.textEditingController});
@@ -27,6 +28,12 @@ class TextfeildInput extends StatelessWidget {
       ),
       keyboardType: textInputType,
       obscureText: isPass,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "$hintText Field is required";
+        }
+        return null;
+      },
     );
   }
 }

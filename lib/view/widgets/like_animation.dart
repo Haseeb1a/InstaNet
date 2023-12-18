@@ -72,24 +72,13 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:instanet/controller/like_animation_controller.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LikeAnimationProvider extends ChangeNotifier {
-  bool isAnimating = false;
 
-  void startAnimation() {
-    isAnimating = true;
-    notifyListeners();
-  }
-
-  void endAnimation() {
-    isAnimating = false;
-    notifyListeners();
-  }
-}
 
 class LikeAnimation extends StatefulWidget {
   final Widget child;
@@ -221,4 +210,3 @@ void main() {
     ),
   );
 }
-

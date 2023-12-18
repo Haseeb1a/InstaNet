@@ -139,9 +139,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
                 return MasonryGridView.count(
                   crossAxisCount: 3,
-                  itemCount: value.studentDatas.length,
+                  itemCount: value.PostsDatas.length,
                   itemBuilder: (context, index) {
-                    final Post snap = value.studentDatas[index];
+                    final Post snap = value.PostsDatas[index];
                     return Image.network(
                       snap.postUrl,
                       fit: BoxFit.cover,

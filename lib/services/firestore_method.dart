@@ -15,11 +15,19 @@ class FireStoreMethods {
   final CollectionReference posts =
       FirebaseFirestore.instance.collection('posts');
   Future<List<Post>> getSudents() async {
-    final snapshot = await posts.orderBy('datePublished', descending: true).get();
+    final snapshot =
+        await posts.orderBy('datePublished', descending: true).get();
     return snapshot.docs.map((doc) {
       print(doc);
-      return Post.fromSnap(doc, doc.id);
+      return Post.fromSnap(doc);
     }).toList();
+  }
+
+  // demofetch posts
+  getPosts() {
+    return posts.orderBy('datePublished', descending: true);
+
+    // return snapshot.docs.map((doc) => Post.fromSnap(doc)).toList();
   }
 
   // getpostProfile
@@ -27,7 +35,7 @@ class FireStoreMethods {
     final snapshot = await posts.where('uid', isEqualTo: uid).get();
     return snapshot.docs.map((doc) {
       print(doc);
-      return Post.fromSnap(doc, doc.id);
+      return Post.fromSnap(doc);
     }).toList();
   }
 
@@ -50,8 +58,9 @@ class FireStoreMethods {
       isFollowing = userSnap
           .data()!['followers']
           .contains(FirebaseAuth.instance.currentUser!.uid);
+      print(postLen);
 
-      List lenths = [postLen,userData,followers,following, isFollowing];
+      List lenths = [postLen, userData, followers, following, isFollowing];
       return lenths;
 
       // setState(() {});
@@ -65,7 +74,7 @@ class FireStoreMethods {
   }
 
   //  getSearachtime
-  Future<List<Users>> getSearchTime(String text) async {
+  Future<List<Users>>getSearchTime(String text) async {
     final snapshot = await posts.firestore
         .collection('user')
         .where(
@@ -163,8 +172,7 @@ class FireStoreMethods {
 
   Future<void> followUser(String uid, String followId) async {
     try {
-      DocumentSnapshot snap =
-          await firestore.collection('user').doc(uid).get();
+      DocumentSnapshot snap = await firestore.collection('user').doc(uid).get();
       List following = (snap.data()! as dynamic)['following'];
 
       if (following.contains(followId)) {

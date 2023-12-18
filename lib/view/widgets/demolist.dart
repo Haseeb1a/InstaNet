@@ -74,7 +74,7 @@ class _DemoListState extends State<DemoList> {
         // AppBarTitile(firstName: 'Stud', secondName: 'ents ')
       ),
       body: Consumer<FeedController>(builder: (context, value, index) {
-        if (value.studentDatas.isEmpty) {
+        if (value.PostsDatas.isEmpty) {
           return const Center(
               child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -104,9 +104,9 @@ class _DemoListState extends State<DemoList> {
         return Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: ListView.builder(
-                itemCount: value.studentDatas.length,
+                itemCount: value.PostsDatas.length,
                 itemBuilder: (context, index) {
-                  final Post snap = value.studentDatas[index];
+                  final Post snap = value.PostsDatas[index];
                   return Container(
                     color: mobileBackgroundColor,
                     padding: const EdgeInsets.symmetric(vertical: 10),

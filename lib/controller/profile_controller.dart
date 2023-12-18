@@ -7,12 +7,13 @@ import 'package:instanet/view/widgets/show_snackbar.dart';
 
 class ProfileController extends ChangeNotifier {
   var userData = {};
-  int postLen = 0;
+  int postLen =0 ;
   int followers = 0;
   int following = 0;
   bool isFollowing = false;
   bool isLoading = false;
   List<Post> posts = [];
+  // postLen=posts.length;
   List? usersData = [];
 
   followdecrement() {

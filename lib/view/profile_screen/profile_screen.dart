@@ -76,15 +76,11 @@ class ProfileScreen extends StatelessWidget {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         buildStatColumn(
-                                          
-                                          value.postLen,"posts"
-                                          ),
+                                            value.posts.length, "posts"),
                                         buildStatColumn(
-                                            value.followers,"followers"
-                                            ),
+                                            value.followers, "followers"),
                                         buildStatColumn(
-                                            value.following,"following"
-                                            ),
+                                            value.following, "following"),
                                       ],
                                     ),
                                     Row(
@@ -181,133 +177,6 @@ class ProfileScreen extends StatelessWidget {
                     );
                   },
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.all(16),
-                //   child: Column(
-                //     children: [
-                //       Row(
-                //         children: [
-                //           CircleAvatar(
-                //             backgroundColor: Colors.grey,
-                //             backgroundImage: NetworkImage(
-                //               pofiledata.userData['photoUrl'] ?? '',
-                //             ),
-                //             radius: 40,
-                //           ),
-                //           Expanded(
-                //             flex: 1,
-                //             child: Column(
-                //               children: [
-                //                 Row(
-                //                   mainAxisSize: MainAxisSize.max,
-                //                   mainAxisAlignment:
-                //                       MainAxisAlignment.spaceEvenly,
-                //                   children: [
-                //                     buildStatColumn(
-                //                         pofiledata.postLen, "posts"),
-                //                     buildStatColumn(
-                //                         pofiledata.followers, "followers"),
-                //                     buildStatColumn(
-                //                         pofiledata.following, "following"),
-                //                   ],
-                //                 ),
-                //                 Row(
-                //                   mainAxisAlignment:
-                //                       MainAxisAlignment.spaceEvenly,
-                //                   children: [
-                //                     FirebaseAuth.instance.currentUser!.uid ==
-                //                             widget.uid
-                //                         ? FollowButton(
-                //                             text: 'Sign Out',
-                //                             backgroundColor:
-                //                                 mobileBackgroundColor,
-                //                             textColor: primaryColor,
-                //                             borderColor: Colors.grey,
-                //                             function: () async {
-                //                               await AuthMethod().signOut();
-                //                               if (context.mounted) {
-                //                                 Navigator.of(context)
-                //                                     .pushReplacement(
-                //                                   MaterialPageRoute(
-                //                                     builder: (context) =>
-                //                                         const LoginScreen(),
-                //                                   ),
-                //                                 );
-                //                               }
-                //                             },
-                //                           )
-                //                         : pofiledata.isFollowing
-                //                             ? FollowButton(
-                //                                 text: 'Unfollow',
-                //                                 backgroundColor: Colors.white,
-                //                                 textColor: Colors.black,
-                //                                 borderColor: Colors.grey,
-                //                                 function: () async {
-                //                                   await FireStoreMethods()
-                //                                       .followUser(
-                //                                     FirebaseAuth.instance
-                //                                         .currentUser!.uid,
-                //                                     pofiledata.userData['uid'],
-                //                                   );
-
-                //                                   setState(() {
-                //                                     pofiledata.isFollowing =
-                //                                         false;
-                //                                     pofiledata.followers--;
-                //                                   });
-                //                                 },
-                //                               )
-                //                             : FollowButton(
-                //                                 text: 'Follow',
-                //                                 backgroundColor: Colors.blue,
-                //                                 textColor: Colors.white,
-                //                                 borderColor: Colors.blue,
-                //                                 function: () async {
-                //                                   await FireStoreMethods()
-                //                                       .followUser(
-                //                                     FirebaseAuth.instance
-                //                                         .currentUser!.uid,
-                //                                     pofiledata.userData['uid'],
-                //                                   );
-
-                //                                   setState(() {
-                //                                     pofiledata.isFollowing =
-                //                                         true;
-                //                                     pofiledata.followers++;
-                //                                   });
-                //                                 },
-                //                               )
-                //                   ],
-                //                 ),
-                //               ],
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //       Container(
-                //         alignment: Alignment.centerLeft,
-                //         padding: const EdgeInsets.only(
-                //           top: 15,
-                //         ),
-                //         child: Text(
-                //           pofiledata.userData['username'],
-                //           style: const TextStyle(
-                //             fontWeight: FontWeight.bold,
-                //           ),
-                //         ),
-                //       ),
-                //       Container(
-                //         alignment: Alignment.centerLeft,
-                //         padding: const EdgeInsets.only(
-                //           top: 1,
-                //         ),
-                //         child: Text(
-                //           pofiledata.userData['bio'],
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 const Divider(),
                 Consumer<ProfileController>(builder: (context, value, index) {
                   if (value.posts.isEmpty) {
@@ -338,42 +207,6 @@ class ProfileScreen extends StatelessWidget {
                     },
                   );
                 })
-                // FutureBuilder(
-                //   future: FirebaseFirestore.instance
-                //       .collection('posts')
-                //       .where('uid', isEqualTo: widget.uid)
-                //       .get(),
-                //   builder: (context, snapshot) {
-                //     if (snapshot.connectionState == ConnectionState.waiting) {
-                //       return const Center(
-                //         child: CircularProgressIndicator(),
-                //       );
-                //     }
-
-                //     return GridView.builder(
-                //       shrinkWrap: true,
-                //       itemCount: (snapshot.data! as dynamic).docs.length,
-                //       gridDelegate:
-                //           const SliverGridDelegateWithFixedCrossAxisCount(
-                //         crossAxisCount: 3,
-                //         crossAxisSpacing: 5,
-                //         mainAxisSpacing: 1.5,
-                //         childAspectRatio: 1,
-                //       ),
-                //       itemBuilder: (context, index) {
-                //         DocumentSnapshot snap =
-                //             (snapshot.data! as dynamic).docs[index];
-
-                //         return SizedBox(
-                //           child: Image(
-                //             image: NetworkImage(snap['postUrl']),
-                //             fit: BoxFit.cover,
-                //           ),
-                //         );
-                //       },
-                //     );
-                //   },
-                // )
               ],
             ),
           );

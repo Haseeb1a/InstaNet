@@ -21,7 +21,7 @@ class Post {
     required this.profImage,
   });
 
-  static Post fromSnap(DocumentSnapshot snap, String id) {
+  static Post fromSnap(DocumentSnapshot snap,) {
     print("getssss");
     var snapshot = snap.data() as Map<String, dynamic>;
     print(snapshot);

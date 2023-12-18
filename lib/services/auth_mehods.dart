@@ -1,15 +1,15 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instanet/helpers/image.dart';
 import 'package:instanet/model/user_model.dart';
 import 'package:instanet/helpers/storage_method.dart';
 
 class AuthMethod {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firetsore = FirebaseFirestore.instance;
-   
 
-   Future<Users> getUserDetails() async {
+  Future<Users> getUserDetails() async {
     User currentUser = _auth.currentUser!;
 
     DocumentSnapshot documentSnapshot =
@@ -23,7 +23,7 @@ class AuthMethod {
     required String password,
     required String username,
     required String bio,
-    required Uint8List file,
+    dynamic file,
   }) async {
     String res = 'some error occerred';
     try {
@@ -31,16 +31,22 @@ class AuthMethod {
               password.isNotEmpty ||
               username.isNotEmpty ||
               bio.isNotEmpty||
-           file != null
+           file!.isEmpty
           ) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-
+        
+        String photoUrl ;
         print(cred.user!.uid);
-        String photoUrl = await StorageMethods()
-            .uploadImageToStorage("profilePics", file, false);
-          
-        Users user=Users(
+        if (file==defaultProfile) {
+           photoUrl = defaultProfile;
+        }else{
+           photoUrl = await StorageMethods()
+            .uploadImageToStorage("profilePics", file, false);  
+        }
+        
+       print(photoUrl);
+        Users user = Users(
           username: username,
           uid: cred.user!.uid,
           photoUrl: photoUrl,
@@ -50,11 +56,13 @@ class AuthMethod {
           following: [],
         );
 
-        await _firetsore.collection('user').doc(cred.user!.uid).set(user.tojson());
+        await _firetsore
+            .collection('user')
+            .doc(cred.user!.uid)
+            .set(user.tojson());
         res = "success";
       }
-    }
-    catch (err) {
+    } catch (err) {
       res = err.toString();
     }
     return res;
@@ -71,16 +79,15 @@ class AuthMethod {
         res = 'success';
       } else {
         res = "please enter all the fields";
-      } 
-    } 
-    catch (err) {
+      }
+    } catch (err) {
       res = err.toString();
     }
     return res;
   }
 
   // singout
-   Future<void> signOut() async {
+  Future<void> signOut() async {
     await _auth.signOut();
   }
 }

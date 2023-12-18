@@ -11,95 +11,101 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> formkey = GlobalKey<FormState>();
     final loginController = Provider.of<LoginController>(context);
     return Scaffold(
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          children: [
-            Flexible(
-              child: Container(),
-              flex: 2,
-            ),
-            SvgPicture.asset(
-              'assets/ic_instagram.svg',
-              color: primaryColor,
-              height: 64,
-            ),
-            SizedBox(
-              height: 64,
-            ),
-            TextfeildInput(
-              hintText: 'enter your email',
-              textInputType: TextInputType.emailAddress,
-              textEditingController: loginController.emailController,
-            ),
-            SizedBox(
-              height: 24,
-            ),
-            TextfeildInput(
-              hintText: 'enter your password',
-              textInputType: TextInputType.text,
-              isPass: true,
-              textEditingController: loginController.passwordController,
-            ),
-            SizedBox(
-              height: 24,
-            ),
-            InkWell(
-              onTap: () {
-                // loginUser;
-                loginController.loginUsers(context);
-              },
-              child: Container(
-                child: loginController.isloading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                        color: primaryColor,
-                      ))
-                    : const Text('log in'),
-                width: double.infinity,
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(vertical: 12),
-                decoration: const ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(4))),
-                    color: blueColor),
+        child: Form(
+          key: formkey,
+          child: Column(
+            children: [
+              Flexible(
+                child: Container(),
+                flex: 2,
               ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Flexible(
-              child: Container(),
-              flex: 2,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  child: Text("Don't have an account?"),
-                  padding: EdgeInsets.symmetric(vertical: 8),
+              SvgPicture.asset(
+                'assets/ic_instagram.svg',
+                color: primaryColor,
+                height: 64,
+              ),
+              SizedBox(
+                height: 64,
+              ),
+              TextfeildInput(
+                hintText: 'enter your email',
+                textInputType: TextInputType.emailAddress,
+                textEditingController: loginController.emailController,
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              TextfeildInput(
+                hintText: 'enter your password',
+                textInputType: TextInputType.text,
+                isPass: true,
+                textEditingController: loginController.passwordController,
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              InkWell(
+                onTap: () {
+                  if (formkey.currentState!.validate()) {
+                    // loginUser;
+                    loginController.loginUsers(context);
+                  }
+                },
+                child: Container(
+                  child: loginController.isloading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ))
+                      : const Text('log in'),
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  decoration: const ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(4))),
+                      color: blueColor),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SingupScreen(),
-                        ));
-                  },
-                  child: Container(
-                    child: Text(
-                      "sign up.",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Flexible(
+                child: Container(),
+                flex: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Text("Don't have an account?"),
                     padding: EdgeInsets.symmetric(vertical: 8),
                   ),
-                )
-              ],
-            )
-          ],
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SingupScreen(),
+                          ));
+                    },
+                    child: Container(
+                      child: Text(
+                        "sign up.",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instanet/controller/feed_controller.dart';
 import 'package:instanet/helpers/app_colors.dart';
 import 'package:instanet/helpers/global_variable.dart';
 import 'package:instanet/view/widgets/post_card.dart';
+import 'package:provider/provider.dart';
 
 class FeedScreen extends StatelessWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -11,10 +13,9 @@ class FeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-
+   final postData= Provider.of<FeedController>(context);
     return Scaffold(
-      backgroundColor:
-          width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
+      backgroundColor: mobileBackgroundColor,
       appBar: width > webScreenSize
           ? null
           : AppBar(
