@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instanet/model/post_model.dart';
 import 'package:instanet/services/firestore_method.dart';
@@ -10,6 +11,8 @@ class FeedController extends ChangeNotifier {
 
   FeedController() {
     fecthDonorDatas();
+    PostsDatas;
+    notifyListeners();
   }
   // getstudent
   Future<void> fecthDonorDatas() async {
@@ -19,16 +22,14 @@ class FeedController extends ChangeNotifier {
   }
 
   // getCommets
-  getCommets(context) async {
-    commets = await FireStoreMethods()
-        .getComments(context, PostsDatas[commets!].postId);
+  getCommets(context, postId) async {
+    commets = await FireStoreMethods().getComments(context, postId);
     print('wwwwwwwwwwww$commets');
     notifyListeners();
   }
 
   // // demo-----------------------
-  fetchPosts()  {
-    return  FireStoreMethods().getPosts();
-   
+  fetchPosts() {
+    return FireStoreMethods().getPosts();
   }
 }

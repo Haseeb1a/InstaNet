@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:instanet/controller/comment_controller.dart';
 import 'package:instanet/controller/feed_controller.dart';
 import 'package:instanet/controller/user_provider.dart';
 import 'package:instanet/helpers/app_colors.dart';
@@ -18,39 +19,11 @@ class CommentsScreen extends StatefulWidget {
 }
 
 class _CommentsScreenState extends State<CommentsScreen> {
-  final TextEditingController commentEditingController =
-      TextEditingController();
-
-  void postComment(String uid, String name, String profilePic) async {
-    try {
-      String res = await FireStoreMethods().postComment(
-        widget.postId,
-        commentEditingController.text,
-        uid,
-        name,
-        profilePic,
-      );
-
-      if (res != 'success') {
-        if (context.mounted) showSnackBar(res, context);
-
-      }else{
-        Provider.of<FeedController>(context,listen: false).getCommets(context);
-      }
-      setState(() {
-        commentEditingController.text = "";
-      });
-    } catch (err) {
-      showSnackBar(
-        err.toString(),
-        context,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final Users user = Provider.of<UserProvider>(context).getUser;
+   
+    final commentController = Provider.of<CommentController>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -61,14 +34,10 @@ class _CommentsScreenState extends State<CommentsScreen> {
         centerTitle: false,
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('posts')
-            .doc(widget.postId)
-            .collection('comments')
-            .orderBy('datePublished',descending: true)
-            .snapshots(),
+        stream: commentController.getcommets(widget.postId),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -76,11 +45,10 @@ class _CommentsScreenState extends State<CommentsScreen> {
           }
 
           return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (ctx, index) => CommentCard(
-              snap:snapshot.data!.docs[index].data()
-            )
-          );
+              
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (ctx, index) =>
+                  CommentCard(snap: snapshot.data!.docs[index].data()));
         },
       ),
       // text input
@@ -100,7 +68,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16, right: 8),
                   child: TextField(
-                    controller: commentEditingController,
+                    controller:commentController.commentController,
                     decoration: InputDecoration(
                       hintText: 'Comment as ${user.username}',
                       border: InputBorder.none,
@@ -109,10 +77,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 ),
               ),
               InkWell(
-                onTap: () => postComment(
+                onTap: () =>commentController. postComment(
                   user.uid,
                   user.username,
                   user.photoUrl,
+                  context,
+                  widget.postId
                 ),
                 child: Container(
                   padding:

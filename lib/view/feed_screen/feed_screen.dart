@@ -13,7 +13,7 @@ class FeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-   final postData= Provider.of<FeedController>(context);
+    final postData = Provider.of<FeedController>(context);
     return Scaffold(
       backgroundColor: mobileBackgroundColor,
       appBar: width > webScreenSize
@@ -37,7 +37,8 @@ class FeedScreen extends StatelessWidget {
               ],
             ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        stream: postData.fetchPosts()
+            .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -46,17 +47,15 @@ class FeedScreen extends StatelessWidget {
             );
           }
           return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (ctx, index) => Container(
-              // margin: EdgeInsets.symmetric(
-              //   horizontal: width > webScreenSize ? width * 0.3 : 0,
-              //   vertical: width > webScreenSize ? 15 : 0,
-              // ),
-              child: PostCard(
-                snap: snapshot.data!.docs[index].data(),
-              ),
-            ),
-          );
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (ctx, index) {
+              return  Container(
+
+                  child: PostCard(
+                    snap: snapshot.data!.docs[index].data(),
+                  ),
+                );
+              });
         },
       ),
     );

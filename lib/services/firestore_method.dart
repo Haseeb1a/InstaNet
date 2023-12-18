@@ -25,9 +25,8 @@ class FireStoreMethods {
 
   // demofetch posts
   getPosts() {
+    getSudents();
     return posts.orderBy('datePublished', descending: true);
-
-    // return snapshot.docs.map((doc) => Post.fromSnap(doc)).toList();
   }
 
   // getpostProfile
@@ -74,7 +73,7 @@ class FireStoreMethods {
   }
 
   //  getSearachtime
-  Future<List<Users>>getSearchTime(String text) async {
+  Future<List<Users>> getSearchTime(String text) async {
     final snapshot = await posts.firestore
         .collection('user')
         .where(
@@ -198,6 +197,16 @@ class FireStoreMethods {
   }
 
   // getcommets
+  getCommentssview(postId) {
+    return FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('comments')
+        .orderBy('datePublished', descending: true)
+        .snapshots();
+  }
+
+  // getcommets
   Future<int?> getComments(context, postId) async {
     try {
       QuerySnapshot snap = await FirebaseFirestore.instance
@@ -205,8 +214,9 @@ class FireStoreMethods {
           .doc(postId)
           .collection('comments')
           .get();
-      int comments = snap.docs.length;
-      return comments;
+      print(snap);
+
+      return snap.docs.length;
     } catch (e) {
       showSnackBar(e.toString(), context);
       return null;

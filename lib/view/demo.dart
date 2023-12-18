@@ -2,97 +2,311 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instanet/controller/animation_controller.dart';
 import 'package:instanet/controller/bottombar_contoller.dart';
 import 'package:instanet/controller/feed_controller.dart';
+import 'package:instanet/controller/user_provider.dart';
 import 'package:instanet/helpers/app_colors.dart';
 import 'package:instanet/helpers/global_variable.dart';
 import 'package:instanet/model/post_model.dart';
+import 'package:instanet/model/user_model.dart';
+import 'package:instanet/services/firestore_method.dart';
+import 'package:instanet/view/commet_screen/comment_screen.dart';
+import 'package:instanet/view/widgets/like_animation.dart';
 import 'package:instanet/view/widgets/post_card.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class Demo extends StatefulWidget {
+class Demo extends StatelessWidget {
   const Demo({super.key});
 
-  @override
-  State<Demo> createState() => _DemoState();
-}
-
-class _DemoState extends State<Demo> {
   // String username = '';
-  // String photoUrl = '';
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-
-  //   getUesername();
-  // }
-
-  // getUesername() async {
-  //   var userSnap = await FirebaseFirestore.instance
-  //       .collection('user')
-  //       .doc(FirebaseAuth.instance.currentUser!.uid)
-  //       .get();
-  //   setState(() {
-  //     username = (userSnap.data() as Map<String, dynamic>)['username'];
-  //     photoUrl = (userSnap.data() as Map<String, dynamic>)['photoUrl'];
-  //   });
-  //   print(username);
-  // }
-
   @override
   Widget build(BuildContext context) {
+    
+    final Users user = Provider.of<UserProvider>(context).getUser;
+     
     final postData = Provider.of<FeedController>(context);
+    final data = Provider.of<AnimatioinController>(
+      context,
+    );
+    
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor:
-          width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
-      appBar: width > webScreenSize
-          ? null
-          : AppBar(
-              backgroundColor: mobileBackgroundColor,
-              centerTitle: false,
-              title: SvgPicture.asset(
-                'assets/ic_instagram.svg',
-                color: primaryColor,
-                height: 32,
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.messenger_outline,
-                    color: primaryColor,
-                  ),
-                  onPressed: () {},
+        backgroundColor:
+            width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
+        appBar: width > webScreenSize
+            ? null
+            : AppBar(
+                backgroundColor: mobileBackgroundColor,
+                centerTitle: false,
+                title: SvgPicture.asset(
+                  'assets/ic_instagram.svg',
+                  color: primaryColor,
+                  height: 32,
                 ),
-              ],
-            ),
-      body: StreamBuilder(
-      stream: postData.fetchPosts().snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-                
-        // Use the postProvider.studentDatas instead of creating a new list
-         List<Post> posts = snapshot.data?.docs.map((doc) => Post.fromSnap(doc)).toList() ?? [];
-        // List<Post> studentDatas = postData.studentDatas;
+                actions: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.messenger_outline,
+                      color: primaryColor,
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+        body: StreamBuilder(
+            stream: postData.fetchPosts().snapshots(),
+            builder: (context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-        return ListView.builder(
-          itemCount: posts.length,
-          itemBuilder: (ctx, index) => Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Username: ${posts[index].username}"),
-                Text("Description: ${posts[index].description}"),
-                // Add other Text widgets for additional properties
-              ],
-            ),
-          ),
-        );
-  }));
+              // Use the postProvider.studentDatas instead of creating a new list
+              List<Post> posts = snapshot.data?.docs
+                      .map((doc) => Post.fromSnap(doc))
+                      .toList() ??
+                  [];
+              // List<Post> studentDatas = postData.studentDatas;
+
+              return ListView.builder(
+                  itemCount: posts.length,
+                  itemBuilder: (ctx, index) {
+                    final snap = posts[index];
+                    print('qqqqqqqqqqqqqqqqqqq$snap');
+                    return Container(
+                        color: mobileBackgroundColor,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Column(children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 16)
+                                .copyWith(right: 0),
+                            // header section
+
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 16,
+                                  backgroundImage: NetworkImage(snap.profImage),
+                                ),
+                                Expanded(
+                                    child: Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        snap.username,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                                IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => Dialog(
+                                                child: ListView(
+                                                    padding:
+                                                        const EdgeInsetsDirectional
+                                                            .symmetric(
+                                                            vertical: 16),
+                                                    shrinkWrap: true,
+                                                    children: [
+                                                      'Delete',
+                                                    ]
+                                                        .map((e) => InkWell(
+                                                              onTap: () {
+                                                                FireStoreMethods()
+                                                                    .deletePost(
+                                                                        snap.postId);
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: Container(
+                                                                padding: const EdgeInsetsDirectional
+                                                                    .symmetric(
+                                                                    vertical:
+                                                                        12,
+                                                                    horizontal:
+                                                                        16),
+                                                                child: Text(e),
+                                                              ),
+                                                            ))
+                                                        .toList()),
+                                              ));
+                                    },
+                                    icon: const Icon(Icons.more_vert))
+                              ],
+                            ),
+                            // image section
+                          ),
+                          GestureDetector(
+                            onDoubleTap: () async {
+                              await FireStoreMethods().likePost(
+                                snap.postId.toString(),
+                                user.uid,
+                                snap.likes,
+                              );
+                              data.changer();
+                              postData.fecthDonorDatas();
+                            },
+                            child:
+                                Stack(alignment: Alignment.center, children: [
+                              SizedBox(
+                                height: height * 0.35,
+                                width: double.infinity,
+                                child: Image.network(
+                                  snap.postUrl,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              AnimatedOpacity(
+                                duration: const Duration(milliseconds: 200),
+                                opacity: data.isAnimating ? 1 : 0,
+                                child: LikeAnimation(
+                                  child: const Icon(
+                                    Icons.favorite,
+                                    color: primaryColor,
+                                    size: 100,
+                                  ),
+                                  isAnimating: data.isAnimating,
+                                  duration: const Duration(milliseconds: 400),
+                                  onEnd: () {
+                                    data.changers();
+                                  },
+                                ),
+                              )
+                            ]),
+                          ),
+                          // like comment share
+                          Row(
+                            children: [
+                              LikeAnimation(
+                                isAnimating: snap.likes.contains(user.uid),
+                                smallLike: true,
+                                child: IconButton(
+                                    onPressed: () async {
+                                      await FireStoreMethods().likePost(
+                                        snap.postId.toString(),
+                                        user.uid,
+                                        snap.likes,
+                                      );
+                                    },
+                                    icon: snap.likes.contains(user.uid)
+                                        ? const Icon(
+                                            Icons.favorite,
+                                            color: Colors.red,
+                                          )
+                                        : const Icon(
+                                            Icons.favorite_border,
+                                            color: primaryColor,
+                                          )),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CommentsScreen(
+                                          postId: snap.postId.toString(),
+                                        ),
+                                      ));
+                                  // postData.getCommets(context, snap.postId     );
+                                },
+                                icon: const Icon(Icons.comment_outlined),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.send),
+                              ),
+                              Expanded(
+                                  child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.bookmark_border)),
+                              ))
+                            ],
+                          ),
+                          // discaription ,number on commnet
+                          Container(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 16),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                DefaultTextStyle(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2!
+                                      .copyWith(fontWeight: FontWeight.w800),
+                                  child: Text(
+                                    '${snap.likes.length} likes',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: RichText(
+                                      text: TextSpan(
+                                          style: const TextStyle(
+                                            color: primaryColor,
+                                          ),
+                                          children: [
+                                        TextSpan(
+                                            text: snap.username,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                          text: snap.description,
+                                        )
+                                      ])),
+                                ),
+                                InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    padding:
+                                        const EdgeInsetsDirectional.symmetric(
+                                            vertical: 4),
+                                    width: double.infinity,
+                                    child: Text(
+                                      'view all ${postData.getCommets(context, snap.postId)} comments ',
+                                      style: const TextStyle(
+                                          fontSize: 16, color: secondaryColor),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding:
+                                      const EdgeInsetsDirectional.symmetric(
+                                          vertical: 4),
+                                  width: double.infinity,
+                                  child: Text(
+                                    DateFormat.yMMMd()
+                                        .format(snap.datePublished),
+                                    style: const TextStyle(
+                                      color: secondaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ]));
+                  });
+            }));
   }
 }

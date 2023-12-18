@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instanet/controller/feed_controller.dart';
 // import 'package:instagram_clone_flutter/models/user.dart' as model;
 import 'package:instanet/controller/user_provider.dart';
 import 'package:instanet/helpers/app_colors.dart';
@@ -31,48 +32,48 @@ class _PostCardState extends State<PostCard> {
   @override
   void initState() {
     super.initState();
-    fetchCommentLen();
+
+    // fetchCommentLen();
   }
 
-  fetchCommentLen() async {
-    try {
-      QuerySnapshot snap = await FirebaseFirestore.instance
-          .collection('posts')
-          .doc(widget.snap['postId'])
-          .collection('comments')
-          .get();
-      commentLen = snap.docs.length;
-    } catch (err) {
-      showSnackBar(
-        err.toString(),
-        context,
-        
-      );
-    }
-    setState(() {});
-  }
+  // fetchCommentLen() async {
+  //   try {
+  //     QuerySnapshot snap = await FirebaseFirestore.instance
+  //         .collection('posts')
+  //         .doc(widget.snap['postId'])
+  //         .collection('comments')
+  //         .get();
+  //     commentLen = snap.docs.length;
+  //   } catch (err) {
+  //     showSnackBar(
+  //       err.toString(),
+  //       context,
+  //     );
+  //   }
+  //   setState(() {});
+  // }
 
   deletePost(String postId) async {
     try {
       await FireStoreMethods().deletePost(postId);
     } catch (err) {
-      showSnackBar(
-        err.toString(),
-        context
-      );
+      showSnackBar(err.toString(), context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Provider.of<FeedController>(context,listen: false).getCommets(context, widget.snap['postId']);
     final Users user = Provider.of<UserProvider>(context).getUser;
     final width = MediaQuery.of(context).size.width;
-
+    final ddd = Provider.of<FeedController>(context);
+    // Provider.of<FeedController>(context)
+    //     .getCommets(context, widget.snap['postId']);
     return Container(
       // boundary needed for web
       decoration: BoxDecoration(
         border: Border.all(
-          color:  mobileBackgroundColor,
+          color: mobileBackgroundColor,
         ),
         color: mobileBackgroundColor,
       ),
@@ -233,7 +234,6 @@ class _PostCardState extends State<PostCard> {
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => CommentsScreen(
-                      
                       postId: widget.snap['postId'].toString(),
                     ),
                   ),

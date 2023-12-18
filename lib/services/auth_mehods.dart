@@ -28,24 +28,23 @@ class AuthMethod {
     String res = 'some error occerred';
     try {
       if (email.isNotEmpty ||
-              password.isNotEmpty ||
-              username.isNotEmpty ||
-              bio.isNotEmpty||
-           file!.isEmpty
-          ) {
+          password.isNotEmpty ||
+          username.isNotEmpty ||
+          bio.isNotEmpty ||
+          file!.isEmpty) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-        
-        String photoUrl ;
+
+        String photoUrl;
         print(cred.user!.uid);
-        if (file==defaultProfile) {
-           photoUrl = defaultProfile;
-        }else{
-           photoUrl = await StorageMethods()
-            .uploadImageToStorage("profilePics", file, false);  
+        if (file == defaultProfile) {
+          photoUrl = defaultProfile;
+        } else {
+          photoUrl = await StorageMethods()
+              .uploadImageToStorage("profilePics", file, false);
         }
-        
-       print(photoUrl);
+
+        print(photoUrl);
         Users user = Users(
           username: username,
           uid: cred.user!.uid,

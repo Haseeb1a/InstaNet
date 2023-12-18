@@ -14,37 +14,49 @@ class AddPostScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return addController.file == null
         ? Center(
-            child: IconButton(
-                onPressed: () => showDialog(
-                    context: context,
-                    builder: (context) {
-                      return SimpleDialog(
-                        title: const Text('create a post'),
-                        children: [
-                          SimpleDialogOption(
-                              padding: const EdgeInsets.all(20),
-                              child: const Text('Choose from photo'),
-                              onPressed: () async {
-                                Navigator.of(context).pop();
-                                addController.pickfilecamera();
-                              }),
-                          SimpleDialogOption(
-                              padding: const EdgeInsets.all(20),
-                              child: const Text('Choose from gallery'),
-                              onPressed: () async {
-                                Navigator.of(context).pop();
-                                addController.pickfilegallery();
-                              }),
-                          SimpleDialogOption(
-                              padding: const EdgeInsets.all(20),
-                              child: const Text('cancel'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              })
-                        ],
-                      );
-                    }),
-                icon: const Icon(Icons.upload)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  
+                  backgroundColor: Colors.grey,
+                  radius: 30,
+                  child: IconButton(
+                      onPressed: () => showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SimpleDialog(
+                              title: const Text('create a post'),
+                              children: [
+                                SimpleDialogOption(
+                                    padding: const EdgeInsets.all(20),
+                                    child: const Text('Choose from photo'),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop();
+                                      addController.pickfilecamera();
+                                    }),
+                                SimpleDialogOption(
+                                    padding: const EdgeInsets.all(20),
+                                    child: const Text('Choose from gallery'),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop();
+                                      addController.pickfilegallery();
+                                    }),
+                                SimpleDialogOption(
+                                    padding: const EdgeInsets.all(20),
+                                    child: const Text('cancel'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    })
+                              ],
+                            );
+                          }),
+                      icon: const Icon(Icons.upload,color: Colors.white,)),
+                ),
+                SizedBox(height: 10,),
+                Text('Make Some Posts...')
+              ],
+            ),
           )
         : Scaffold(
             appBar: AppBar(
@@ -120,32 +132,3 @@ class AddPostScreen extends StatelessWidget {
           );
   }
 }
-
-// selectImage(BuildContext context) {
-//   // Uint8List? file;
-//   // final loginController = Provider.of<LoginController>(context);
-//   final AddController = Provider.of<Addcontroller>(context);
-//   return showDialog(
-//       context: context,
-//       builder: (context) {
-//         return SimpleDialog(
-//           title: Text('create a post'),
-//           children: [
-//             SimpleDialogOption(
-//                 padding: const EdgeInsets.all(20),
-//                 child: const Text('Choose from photo'),
-//                 onPressed: () async {
-//                   Navigator.of(context).pop();
-//                   AddController.pickfilecamera();
-//                 }),
-//             SimpleDialogOption(
-//                 padding: const EdgeInsets.all(20),
-//                 child: const Text('Choose from gallery'),
-//                 onPressed: () async {
-//                   Navigator.of(context).pop();
-//                   AddController.pickfilegallery();
-//                 }),
-//           ],
-//         );
-//       });
-// }
