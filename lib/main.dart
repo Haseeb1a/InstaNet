@@ -5,6 +5,7 @@ import 'package:instanet/controller/animation_controller.dart';
 import 'package:instanet/controller/bottombar_contoller.dart';
 import 'package:instanet/controller/comment_controller.dart';
 import 'package:instanet/controller/feed_controller.dart';
+import 'package:instanet/controller/like_animation_controller.dart';
 import 'package:instanet/controller/logincontroller.dart';
 import 'package:instanet/controller/profile_controller.dart';
 import 'package:instanet/controller/search_controller.dart';
@@ -39,8 +40,10 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => BottomController()),
           ChangeNotifierProvider(create: (context) => FeedController()),
           ChangeNotifierProvider(create: (context) => ProfileController()),
+          ChangeNotifierProvider(create: (context) => LikeAnimationProvider()),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
             title: 'intagram clone',
             theme: ThemeData.dark().copyWith(
               scaffoldBackgroundColor: mobileBackgroundColor,

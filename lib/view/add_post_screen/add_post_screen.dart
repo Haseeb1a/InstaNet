@@ -18,7 +18,6 @@ class AddPostScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  
                   backgroundColor: Colors.grey,
                   radius: 30,
                   child: IconButton(
@@ -51,9 +50,14 @@ class AddPostScreen extends StatelessWidget {
                               ],
                             );
                           }),
-                      icon: const Icon(Icons.upload,color: Colors.white,)),
+                      icon: const Icon(
+                        Icons.upload,
+                        color: Colors.white,
+                      )),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Text('Make Some Posts...')
               ],
             ),

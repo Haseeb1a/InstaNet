@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class LikeAnimationProvider extends ChangeNotifier {
-  bool isAnimating = false;
+  bool isLikeAnimating = false;
 
   void startAnimation() {
-    isAnimating = true;
+    isLikeAnimating = true;
     notifyListeners();
   }
 
   void endAnimation() {
-    isAnimating = false;
+    isLikeAnimating = false;
     notifyListeners();
   }
 }

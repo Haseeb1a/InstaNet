@@ -22,10 +22,6 @@ class SearchControllers extends ChangeNotifier {
   checkuser() {
     isShowUser = true;
     notifyListeners();
-    // if (searchController.text.isEmpty) {
-    //   isShowUser = false;
-    //   notifyListeners();
-    // }
   }
 
   changerFall() {

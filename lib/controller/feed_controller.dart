@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instanet/model/post_model.dart';
 import 'package:instanet/services/firestore_method.dart';
-import 'package:instanet/view/demo.dart';
+import 'package:instanet/view/widgets/show_snackbar.dart';
 
 class FeedController extends ChangeNotifier {
   int? commets = 0;
@@ -11,7 +11,7 @@ class FeedController extends ChangeNotifier {
 
   FeedController() {
     fecthDonorDatas();
-    PostsDatas;
+    commets;
     notifyListeners();
   }
   // getstudent
@@ -31,5 +31,30 @@ class FeedController extends ChangeNotifier {
   // // demo-----------------------
   fetchPosts() {
     return FireStoreMethods().getPosts();
+  }
+
+  fetchCommentLen(context, String postId) async {
+    try {
+      QuerySnapshot snap = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .collection('comments')
+          .get();
+      commets = snap.docs.length;
+    } catch (err) {
+      showSnackBar(
+        err.toString(),
+        context,
+      );
+    }
+    notifyListeners();
+  }
+  // liked and unliked
+  void likeUp(postId, uid, likes) {
+    FireStoreMethods().likePost(
+      postId,
+      uid,
+      likes,
+    );
   }
 }

@@ -12,11 +12,11 @@ class MobileScreenLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottomcontroller = Provider.of<BottomController>(context);
-      Provider.of<UserProvider>(context, listen: false).refreshUser();
+    Provider.of<UserProvider>(context, listen: false).refreshUser();
     return Scaffold(
       body: PageView(
-        controller:bottomcontroller. pageController,
-        onPageChanged:bottomcontroller.onPageChanged,
+        controller: bottomcontroller.pageController,
+        onPageChanged: bottomcontroller.onPageChanged,
         children: homeScreenItems,
       ),
       bottomNavigationBar: CupertinoTabBar(
@@ -25,7 +25,8 @@ class MobileScreenLayout extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
-              color: (bottomcontroller.pages == 0) ? primaryColor : secondaryColor,
+              color:
+                  (bottomcontroller.pages == 0) ? primaryColor : secondaryColor,
             ),
             label: '',
             backgroundColor: primaryColor,
@@ -33,29 +34,26 @@ class MobileScreenLayout extends StatelessWidget {
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.search,
-                color: (bottomcontroller.pages == 1) ? primaryColor : secondaryColor,
+                color: (bottomcontroller.pages == 1)
+                    ? primaryColor
+                    : secondaryColor,
               ),
               label: '',
               backgroundColor: primaryColor),
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.add_circle,
-                color: (bottomcontroller.pages == 2) ? primaryColor : secondaryColor,
+                color: (bottomcontroller.pages == 2)
+                    ? primaryColor
+                    : secondaryColor,
               ),
               label: '',
               backgroundColor: primaryColor),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.favorite,
-              color: (bottomcontroller.pages == 3) ? primaryColor : secondaryColor,
-            ),
-            label: '',
-            backgroundColor: primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
               Icons.person,
-              color: (bottomcontroller.pages == 4) ? primaryColor : secondaryColor,
+              color:
+                  (bottomcontroller.pages == 4) ? primaryColor : secondaryColor,
             ),
             label: '',
             backgroundColor: primaryColor,

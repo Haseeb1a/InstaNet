@@ -13,8 +13,7 @@ class CommentCard extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(
-                snap['profilePic']),
+            backgroundImage: NetworkImage(snap['profilePic']),
             radius: 18,
           ),
           Expanded(
@@ -34,14 +33,16 @@ class CommentCard extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.w400))
                     ]),
                   ),
-                 Padding(
+                  Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
                       DateFormat.yMMMd().format(
                         snap['datePublished'].toDate(),
                       ),
                       style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w400,),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   )
                 ],

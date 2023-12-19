@@ -5,7 +5,7 @@ class TextfeildInput extends StatelessWidget {
   final bool isPass;
   final String hintText;
   final TextInputType textInputType;
-  
+
   const TextfeildInput(
       {super.key,
       this.isPass = false,

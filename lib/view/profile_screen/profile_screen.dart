@@ -7,6 +7,7 @@ import 'package:instanet/model/post_model.dart';
 import 'package:instanet/services/auth_mehods.dart';
 import 'package:instanet/services/firestore_method.dart';
 import 'package:instanet/view/login_page/login_screen.dart';
+import 'package:instanet/view/profile_screen/statcolumn.dart';
 import 'package:instanet/view/widgets/follow_button.dart';
 import 'package:provider/provider.dart';
 
@@ -18,15 +19,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pofiledata = Provider.of<ProfileController>(context, listen: false);
-    // Provider.of<ProfileController>(context).uerDatails(
-    //     widget.uid,
-    //     pofiledata.postLen,
-    //     pofiledata.userData,
-    //     pofiledata.followers,
-    //     pofiledata.following,
-    //     pofiledata.isFollowing,
-    //     context);
-
     Provider.of<ProfileController>(context, listen: false).getPosts(uid);
     Provider.of<ProfileController>(
       context,
@@ -96,8 +88,8 @@ class ProfileScreen extends StatelessWidget {
                                                     mobileBackgroundColor,
                                                 textColor: primaryColor,
                                                 borderColor: Colors.grey,
-                                                function: () async {
-                                                  await AuthMethod().signOut();
+                                                function: () {
+                                                  pofiledata.singOut();
                                                   if (context.mounted) {
                                                     Navigator.of(context)
                                                         .pushReplacement(
@@ -116,14 +108,15 @@ class ProfileScreen extends StatelessWidget {
                                                         Colors.white,
                                                     textColor: Colors.black,
                                                     borderColor: Colors.grey,
-                                                    function: () async {
-                                                      await FireStoreMethods()
-                                                          .followUser(
-                                                        FirebaseAuth.instance
-                                                            .currentUser!.uid,
-                                                        value.userData['uid'],
-                                                      );
-
+                                                    function: () {
+                                                      pofiledata
+                                                          .followandfolling(
+                                                              FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser!
+                                                                  .uid,
+                                                              value.userData[
+                                                                  'uid']);
                                                       value.followdecrement();
                                                     },
                                                   )
@@ -133,13 +126,15 @@ class ProfileScreen extends StatelessWidget {
                                                         Colors.blue,
                                                     textColor: Colors.white,
                                                     borderColor: Colors.blue,
-                                                    function: () async {
-                                                      await FireStoreMethods()
-                                                          .followUser(
-                                                        FirebaseAuth.instance
-                                                            .currentUser!.uid,
-                                                        value.userData['uid'],
-                                                      );
+                                                    function: () {
+                                                      pofiledata
+                                                          .followandfolling(
+                                                              FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser!
+                                                                  .uid,
+                                                              value.userData[
+                                                                  'uid']);
 
                                                       value.followicrement();
                                                     },
@@ -181,7 +176,7 @@ class ProfileScreen extends StatelessWidget {
                 Consumer<ProfileController>(builder: (context, value, index) {
                   if (value.posts.isEmpty) {
                     return const Center(
-                      child: Text(' no post'),
+                      child: Text('no post'),
                     );
                   }
 
@@ -210,32 +205,5 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
           );
-  }
-
-  Column buildStatColumn(int num, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          num.toString(),
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 4),
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: Colors.grey,
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

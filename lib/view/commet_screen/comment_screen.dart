@@ -22,7 +22,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
   @override
   Widget build(BuildContext context) {
     final Users user = Provider.of<UserProvider>(context).getUser;
-   
+
     final commentController = Provider.of<CommentController>(context);
 
     return Scaffold(
@@ -37,7 +37,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
         stream: commentController.getcommets(widget.postId),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -45,7 +44,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
           }
 
           return ListView.builder(
-              
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (ctx, index) =>
                   CommentCard(snap: snapshot.data!.docs[index].data()));
@@ -68,7 +66,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16, right: 8),
                   child: TextField(
-                    controller:commentController.commentController,
+                    controller: commentController.commentController,
                     decoration: InputDecoration(
                       hintText: 'Comment as ${user.username}',
                       border: InputBorder.none,
@@ -77,13 +75,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 ),
               ),
               InkWell(
-                onTap: () =>commentController. postComment(
-                  user.uid,
-                  user.username,
-                  user.photoUrl,
-                  context,
-                  widget.postId
-                ),
+                onTap: () => commentController.postComment(user.uid,
+                    user.username, user.photoUrl, context, widget.postId),
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 8),

@@ -50,9 +50,10 @@ class FeedScreen extends StatelessWidget {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (ctx, index) {
               return  Container(
-
+                   
                   child: PostCard(
                     snap: snapshot.data!.docs[index].data(),
+                    
                   ),
                 );
               });

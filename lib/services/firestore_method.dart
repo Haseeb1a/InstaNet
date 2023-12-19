@@ -38,28 +38,23 @@ class FireStoreMethods {
     }).toList();
   }
 
-  Future<List?> userLengthDetais(uid, postLen, userData, followers, following,
-      isFollowing, context) async {
+  // Postlength
+  Future<List?> userLengthDetais(
+      uid, userData, followers, following, isFollowing, context) async {
     try {
       var userSnap =
           await FirebaseFirestore.instance.collection('user').doc(uid).get();
 
       // get post lENGTH
-      var postSnap = await FirebaseFirestore.instance
-          .collection('posts')
-          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .get();
 
-      postLen = postSnap.docs.length;
       userData = userSnap.data()!;
       followers = userSnap.data()!['followers'].length;
       following = userSnap.data()!['following'].length;
       isFollowing = userSnap
           .data()!['followers']
           .contains(FirebaseAuth.instance.currentUser!.uid);
-      print(postLen);
 
-      List lenths = [postLen, userData, followers, following, isFollowing];
+      List lenths = [userData, followers, following, isFollowing];
       return lenths;
 
       // setState(() {});

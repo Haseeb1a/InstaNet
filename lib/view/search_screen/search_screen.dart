@@ -22,24 +22,23 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     Provider.of<SearchControllers>(context).getusers();
-    final SearchProvider = Provider.of<SearchControllers>(context);
-    final postProvider = Provider.of<FeedController>(context);
+    final searchProvider = Provider.of<SearchControllers>(context);
 
     return Scaffold(
         appBar: AppBar(
           backgroundColor: mobileBackgroundColor,
           title: Form(
             child: TextFormField(
-              controller: SearchProvider.searchController,
+              controller: searchProvider.searchController,
               decoration:
                   const InputDecoration(labelText: 'Search for a user...'),
               onFieldSubmitted: (String _) {
-                SearchProvider.checkuser();
+                searchProvider.checkuser();
               },
             ),
           ),
         ),
-        body: SearchProvider.isShowUser
+        body: searchProvider.isShowUser
             ? Consumer<SearchControllers>(builder: (context, value, index) {
                 if (value.userdata.isEmpty) {
                   return const Center(
@@ -59,7 +58,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                         );
-                        SearchProvider.changerFall();
+                        searchProvider.changerFall();
                       },
                       child: ListTile(
                         leading: CircleAvatar(
@@ -76,67 +75,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   },
                 );
               }
-
-                // ? FutureBuilder(
-                //     future: FirebaseFirestore.instance
-                //         .collection('user')
-                //         .where(
-                //           'username',
-                //           isGreaterThanOrEqualTo:
-                //               SearchProvider.searchController.text,
-                //         )
-                //         .get(),
-                //     builder: (context, snapshot) {
-                //       if (!snapshot.hasData) {
-                //         return const Center(
-                //           child: CircularProgressIndicator(),
-                //         );
-                //       }
-                //       return ListView.builder(
-                //         itemCount: (snapshot.data! as dynamic).docs.length,
-                //         itemBuilder: (context, index) {
-                //           return InkWell(
-                //             onTap: () {
-                //               Navigator.of(context).push(
-                //                 MaterialPageRoute(
-                //                   builder: (context) => ProfileScreen(
-                //                     uid: (snapshot.data! as dynamic).docs[index]
-                //                         ['uid'],
-                //                   ),
-                //                 ),
-                //               );
-                //               SearchProvider.changerFall();
-                //             },
-                //             child: ListTile(
-                //               leading: CircleAvatar(
-                //                 backgroundImage: NetworkImage(
-                //                   (snapshot.data! as dynamic).docs[index]
-                //                       ['photoUrl'],
-                //                 ),
-                //                 radius: 16,
-                //               ),
-                //               title: Text(
-                //                 (snapshot.data! as dynamic).docs[index]['username'],
-                //               ),
-                //             ),
-                //           );
-                //         },
-                //       );
-                //     },
-                //   )
                 )
             : Consumer<FeedController>(builder: (context, value, index) {
-                // future: FirebaseFirestore.instance
-                //     .collection('posts')
-                //     .orderBy('datePublished')
-                //     .get(),
-                // builder: (context, snapshot) {
-                // if (!snapshot.hasData) {
-                //   return const Center(
-                //     child: CircularProgressIndicator(),
-                //   );
-                // }
-
                 return MasonryGridView.count(
                   crossAxisCount: 3,
                   itemCount: value.PostsDatas.length,
