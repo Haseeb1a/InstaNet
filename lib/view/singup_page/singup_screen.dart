@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instanet/controller/logincontroller.dart';
 import 'package:instanet/helpers/app_colors.dart';
 import 'package:instanet/helpers/image.dart';
+import 'package:instanet/view/widgets/show_snackbar.dart';
 import 'package:instanet/view/widgets/text_feild_input.dart';
 import 'package:provider/provider.dart';
 
@@ -41,15 +42,13 @@ class SingupScreen extends StatelessWidget {
                           backgroundImage: MemoryImage(loginController.image!))
                       : const CircleAvatar(
                           radius: 64,
-                          backgroundImage: NetworkImage(
-                              defaultProfile),
+                          backgroundImage: NetworkImage(defaultProfile),
                         ),
                   Positioned(
                       bottom: -10,
                       left: 80,
                       child: IconButton(
                           onPressed: () {
-
                             loginController.selectimage();
                           },
                           icon: const Icon(Icons.add_a_photo)))
@@ -93,9 +92,10 @@ class SingupScreen extends StatelessWidget {
                 height: 24,
               ),
               InkWell(
-                onTap: () {
+                onTap: () async {
                   if (formkey.currentState!.validate()) {
-                    loginController.signUpUser(context);
+                    String result = await loginController.signUpUser(context);
+                    showSnackBar(result, context);
                   }
                 },
                 child: Container(

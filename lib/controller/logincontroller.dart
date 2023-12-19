@@ -33,7 +33,7 @@ class LoginController extends ChangeNotifier {
   }
 
   // singupControlers
-  void signUpUser(context) async {
+  Future<String> signUpUser(context) async {
     isloading = true;
     notifyListeners();
     // if (image!.isEmpty) {
@@ -52,14 +52,16 @@ class LoginController extends ChangeNotifier {
       biocontroller.clear;
       passwordController.clear;
       notifyListeners();
+      return res;
     } else {
       isloading = false;
       notifyListeners();
+      return res;
     }
 
-    if (res != 'success') {
-      showSnackBar(res, context);
-    }
+    // if (res != 'success') {
+    //   return res;
+    // }
   }
 
   //  login Fucntios
