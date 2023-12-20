@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:instanet/helpers/image.dart';
 import 'package:instanet/model/user_model.dart';
 import 'package:instanet/helpers/storage_method.dart';
@@ -8,6 +9,7 @@ import 'package:instanet/helpers/storage_method.dart';
 class AuthMethod {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firetsore = FirebaseFirestore.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<Users> getUserDetails() async {
     User currentUser = _auth.currentUser!;
@@ -16,6 +18,52 @@ class AuthMethod {
         await _firetsore.collection('user').doc(currentUser.uid).get();
 
     return Users.fromSnap(documentSnapshot);
+  }
+
+  // googleauth------------
+
+  Future<String> signInWithGoogle() async {
+    String res = 'no be stated';
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      print('tttttttttttttttttttttttttttttttttttttttttttttttttttttttttt');
+      //  set the Users to firebase
+      Users user = Users(
+        username: googleUser!.displayName!,
+        uid: FirebaseAuth.instance.currentUser!.uid,
+        photoUrl: googleUser.photoUrl!,
+        email: googleUser.email,
+        bio: 'Using Intagram',
+        followers: [],
+        following: [],
+      );
+
+      await _firetsore
+          .collection('user')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set(user.tojson());
+      res = 'success';
+      print('ppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
+      return res;
+    } catch (e) {
+      print(e);
+      res = 'worng on $e';
+      return res;
+    }
   }
 
   Future<String> singUpuser({
@@ -87,6 +135,8 @@ class AuthMethod {
 
   // singout
   Future<void> signOut() async {
+    await _googleSignIn.signOut();
     await _auth.signOut();
+    // await _auth.signOut();
   }
 }

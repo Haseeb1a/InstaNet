@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => LikeAnimationProvider()),
         ],
         child: MaterialApp(
-          debugShowCheckedModeBanner: false,
+            debugShowCheckedModeBanner: false,
             title: 'intagram clone',
             theme: ThemeData.dark().copyWith(
               scaffoldBackgroundColor: mobileBackgroundColor,

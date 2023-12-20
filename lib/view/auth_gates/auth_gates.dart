@@ -11,7 +11,7 @@ class AuthGate extends StatelessWidget {
       // it run only user singin or singout
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, AsyncSnapshot<User?> snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.hasData||snapshot.data!=null) {
           print(snapshot.data);
           return MobileScreenLayout();
         } else if (snapshot.hasError) {
