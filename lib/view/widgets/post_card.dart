@@ -130,7 +130,8 @@ class _PostCardState extends State<PostCard> {
           // IMAGE SECTION OF THE POST
           GestureDetector(
             onDoubleTap: () {
-              ddd.likeUp(widget.snap['postId'].toString(), user.uid, widget.snap['likes']);
+              ddd.likeUp(widget.snap['postId'].toString(), user.uid,
+                  widget.snap['likes']);
               // FeedController.
               // FireStoreMethods().likePost(
               //   widget.snap['postId'].toString(),
@@ -170,7 +171,8 @@ class _PostCardState extends State<PostCard> {
                           Icons.favorite_border,
                         ),
                   onPressed: () {
-                      ddd.likeUp(widget.snap['postId'].toString(),user.uid, widget.snap['likes']);
+                    ddd.likeUp(widget.snap['postId'].toString(), user.uid,
+                        widget.snap['likes']);
                     // FireStoreMethods().likePost(
                     //   widget.snap['postId'].toString(),
                     //   user.uid,

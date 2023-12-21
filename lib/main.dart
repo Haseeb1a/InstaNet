@@ -7,6 +7,7 @@ import 'package:instanet/controller/comment_controller.dart';
 import 'package:instanet/controller/feed_controller.dart';
 import 'package:instanet/controller/like_animation_controller.dart';
 import 'package:instanet/controller/logincontroller.dart';
+import 'package:instanet/controller/mobilephone_controller.dart';
 import 'package:instanet/controller/profile_controller.dart';
 import 'package:instanet/controller/search_controller.dart';
 import 'package:instanet/controller/user_provider.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => FeedController()),
           ChangeNotifierProvider(create: (context) => ProfileController()),
           ChangeNotifierProvider(create: (context) => LikeAnimationProvider()),
+          ChangeNotifierProvider(create: (context) => MobileController()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

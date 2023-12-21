@@ -4,6 +4,7 @@ import 'package:instanet/controller/logincontroller.dart';
 import 'package:instanet/helpers/app_colors.dart';
 import 'package:instanet/services/auth_mehods.dart';
 import 'package:instanet/view/bottom_bar/mobile_screen_layout.dart';
+import 'package:instanet/view/login_page/widgets/mobile_page.dart';
 import 'package:instanet/view/singup_page/singup_screen.dart';
 import 'package:instanet/view/widgets/text_feild_input.dart';
 import 'package:provider/provider.dart';
@@ -81,7 +82,13 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                       Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Mobilepage(),
+                            ));
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
