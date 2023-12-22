@@ -30,6 +30,7 @@ class TextfeildInput extends StatelessWidget {
       obscureText: isPass,
       validator: (value) {
         if (value == null || value.isEmpty) {
+          
           return "$hintText Field is required";
         }
         return null;
