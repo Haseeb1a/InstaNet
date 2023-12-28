@@ -61,8 +61,8 @@ class Userinfomation extends ChangeNotifier {
 
       mobileControllers.savaUserDataToFirebase(
           context: context,
-          usermodel: user,
-           profilePic: image!,
+          userModel: user,
+           profilePicle: image!,
           onSuccess: () {
             mobileControllers
                 .saveUserDataToSP().then((value) => mobileControllers.setSignIn().then(

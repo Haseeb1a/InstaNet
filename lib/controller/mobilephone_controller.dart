@@ -13,17 +13,19 @@ import 'package:instanet/view/widgets/show_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MobileController extends ChangeNotifier {
-  bool _isSignedIn = false;
-  bool get isSignedIn => _isSignedIn;
+  
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+
+  bool _isSignedIn = false;
+  bool get isSignedIn => _isSignedIn;
   bool _isLoading = false;
-  bool get isloading => _isLoading;
+  bool get isLoading => _isLoading;
   String? _uid;
   String get uid => _uid!;
-  Users? _usermodel;
-  Users get usermode => _usermodel!;
+  Users? _userModel;
+  Users get userModel => _userModel!;
 
   final TextEditingController numbercontroller = TextEditingController();
   Country SelectedCountry = Country(
@@ -124,43 +126,34 @@ class MobileController extends ChangeNotifier {
   }
 
 // store to the firebsedatbase
- savaUserDataToFirebase(
+  savaUserDataToFirebase(
       {required BuildContext context,
-      required Users usermodel,
-      required File profilePic,
-      required Function onSuccess
-      }) async {
-    print('1111111111111111111111111111111111111111111111111pppppp');
-    // _isLoading = true;
-    print(uid ??'afkil ');
-    // print(profilePic ??'kkkkqq');
-    print(usermodel.email ??'kkkkaa');
-    print(usermodel.bio ??'kkkkww');
-    print(usermodel.username ??'kkkkdd');
-    // print(u);
-    print(usermodel.bio.toString()??'dkfsl');
+      required Users userModel,
+      required File profilePicle,
+      required Function onSuccess}) async {
+    print('1111111111111111111111111111111111111111111111111');
     _isLoading = true;
     notifyListeners();
     try {
-      await storeFileToStorage("profilePic/$_uid", profilePic).then((value) {
-        usermodel.photoUrl = value;
+      await storeFileToStorage("profilePic/$_uid", profilePicle).then((value) {
+        userModel.photoUrl = value;
 
-        usermodel.uid = _firebaseAuth.currentUser!.uid;
+        userModel.uid = _firebaseAuth.currentUser!.uid;
       });
-      _usermodel = usermodel;
+      _userModel = userModel;
 
       //  UPLOADING TO DATABASE
       await _firebaseFirestore
           .collection("user")
-          .doc(_usermodel!.uid)
-          .set(usermodel.tojson())
+          .doc(_userModel!.uid)
+          .set(userModel.tojson())
           .then((value) {
         onSuccess();
         _isLoading = false;
         notifyListeners();
       });
     } on FirebaseAuthException catch (e) {
-      showSnackBar( e.message.toString(),context,);
+      showSnackBar(e.message.toString(),context, );
       _isLoading = false;
       notifyListeners();
     }
@@ -169,11 +162,11 @@ class MobileController extends ChangeNotifier {
   // get data from the firebase;
   Future getDataFromFirebase() async {
     await _firebaseFirestore
-        .collection('users')
+        .collection('user')
         .doc(_firebaseAuth.currentUser!.uid)
         .get()
         .then((DocumentSnapshot snapshot) {
-      _usermodel = Users(
+      _userModel = Users(
           email: snapshot['email'],
           uid: snapshot['uid'],
           photoUrl: snapshot['photoUrl'],
@@ -181,14 +174,14 @@ class MobileController extends ChangeNotifier {
           bio: snapshot['bio'],
           followers: snapshot['followers'],
           following: snapshot['following']);
-      _uid = usermode.uid;
+      _uid = userModel.uid;
     });
   }
 
   // upload the data to SharedPreferences
  Future saveUserDataToSP() async {
     SharedPreferences sharedPref = await SharedPreferences.getInstance();
-    await sharedPref.setString("user_model", jsonEncode(usermode.tojson()));
+    await sharedPref.setString("user_model", jsonEncode(userModel.tojson()));
   }
   // set to  the userset
  Future setSignIn() async {

@@ -14,17 +14,6 @@ class Mobilepage extends StatelessWidget {
     // final TextEditingController numbercontroller = TextEditingController();
     final mobileController = Provider.of<MobileController>(context);
 
-    // Country SelectedCountry = Country(
-    //     phoneCode: '91',
-    //     countryCode: 'IN',
-    //     e164Sc: 0,
-    //     geographic: true,
-    //     level: 1,
-    //     name: "india",
-    //     example: "india",
-    //     displayName: "india",
-    //     displayNameNoCountryCode: "IN",
-    //     e164Key: '');
 
     return Scaffold(
       appBar: AppBar(

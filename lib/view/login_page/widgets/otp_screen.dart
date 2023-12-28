@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instanet/controller/mobilephone_controller.dart';
+import 'package:instanet/view/bottom_bar/mobile_screen_layout.dart';
+import 'package:instanet/view/login_page/widgets/details_page.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +13,7 @@ class OtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MobileControllers = Provider.of<MobileController>(context);
+    // final MobileControllers = Provider.of<MobileController>(context);
     final GlobalKey<FormState> formkey = GlobalKey<FormState>();
     final TextEditingController otpController = TextEditingController();
     final defaultPinTheme = PinTheme(
@@ -99,8 +101,7 @@ class OtpScreen extends StatelessWidget {
                   onTap: () {
                     if (formkey.currentState!.validate()) {
                       if (otpController.text.isNotEmpty) {
-                        MobileControllers.verifyOtp(
-                            context, otpController.text, verificationId!);
+                        verifyOtp(context, otpController.text);
                       }
                     }
                   },
@@ -122,7 +123,47 @@ class OtpScreen extends StatelessWidget {
       ),
     );
   }
-
+ void verifyOtp(BuildContext context, String userOtp) {
+    final data = Provider.of<MobileController>(context, listen: false);
+    data.verifyOtps(
+      
+      context: context,
+      verifcationId: verificationId!,
+      // verificationId: widget.verificationId,
+      userOtp: userOtp,
+      onSuccess: () {
+        // checking whether user exists in the db
+        data.checkExithingUser().then(
+          (value) async {
+            if (value == true) {
+              print('user exiting the app  yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
+              // user exists in our app
+              data.getDataFromFirebase().then(
+                    (value) => data.saveUserDataToSP().then(
+                          (value) => data.setSignIn().then(
+                                (value) => Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MobileScreenLayout(),
+                                    ),
+                                    (route) => false),
+                              ),
+                        ),
+                  );
+            } else {
+               print('user exiting the app  oooooooooooooooooooooooooooooooooooooooooooooooo');
+              // new user
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const UserInformationScreen()),
+                  (route) => false);
+            }
+          },
+        );
+      },
+    );
+  }
   // void verfyOtp(BuildContext context,String userOtp){
   //   final data=Provider.of
   // }
