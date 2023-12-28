@@ -7,6 +7,9 @@ import 'package:instanet/services/firestore_method.dart';
 import 'package:instanet/view/widgets/show_snackbar.dart';
 
 class ProfileController extends ChangeNotifier {
+  // ProfileController(){
+
+  // }
   var userData = {};
   // int postLen =0 ;
   int followers = 0;
