@@ -10,6 +10,7 @@ import 'package:instanet/controller/logincontroller.dart';
 import 'package:instanet/controller/mobilephone_controller.dart';
 import 'package:instanet/controller/profile_controller.dart';
 import 'package:instanet/controller/search_controller.dart';
+import 'package:instanet/controller/user_information.dart';
 import 'package:instanet/controller/user_provider.dart';
 import 'package:instanet/firebase_options.dart';
 import 'package:instanet/helpers/app_colors.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => ProfileController()),
           ChangeNotifierProvider(create: (context) => LikeAnimationProvider()),
           ChangeNotifierProvider(create: (context) => MobileController()),
+          ChangeNotifierProvider(create: (context) => Userinfomation()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

@@ -1,10 +1,13 @@
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:instanet/helpers/image.dart';
 import 'package:instanet/model/user_model.dart';
 import 'package:instanet/helpers/storage_method.dart';
+import 'package:instanet/view/login_page/widgets/otp_screen.dart';
 
 class AuthMethod {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -138,5 +141,39 @@ class AuthMethod {
     await _googleSignIn.signOut();
     await _auth.signOut();
     // await _auth.signOut();
+  }
+
+
+
+    //  phoneSinginMehthod   
+   void loginWithPhoneNumber(context, String phoneNumber) {
+    
+    try {
+
+
+      _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await _auth.signInWithCredential(credential);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          log(e.toString());
+          throw Exception(e.message);
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OtpScreen(
+                    
+                        phoneNumber: phoneNumber,
+                        verificationId: verificationId,
+                      )));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+    } catch (e) {
+      log('\n signInWithPhoneNumber: $e');
+    }
   }
 }

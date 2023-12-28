@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:instanet/controller/mobilephone_controller.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 
 class OtpScreen extends StatelessWidget {
-  String mobilenumber;
-  OtpScreen({super.key, required this.mobilenumber});
+  final String? phoneNumber;
+  final String? verificationId;
+  OtpScreen(
+      {super.key, required this.phoneNumber, required this.verificationId});
 
   @override
   Widget build(BuildContext context) {
+    final MobileControllers = Provider.of<MobileController>(context);
+    final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+    final TextEditingController otpController = TextEditingController();
     final defaultPinTheme = PinTheme(
         width: 56,
         height: 68,
@@ -51,31 +58,52 @@ class OtpScreen extends StatelessWidget {
                   margin: EdgeInsets.only(
                     bottom: 40,
                   ),
-                  child: Text(mobilenumber,
+                  child: Text(phoneNumber!,
                       style: TextStyle(
                           color: const Color.fromARGB(255, 255, 255, 255),
                           fontSize: 18))),
-              Pinput(
-                length: 4,
-                defaultPinTheme: PinTheme(
-                    width: 56,
-                    height: 68,
-                    textStyle: TextStyle(fontSize: 22, color: Colors.black),
-                    decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.transparent))),
-                focusedPinTheme: defaultPinTheme.copyWith(
-                    decoration: defaultPinTheme.decoration!.copyWith(
-                        border: Border.all(
-                            color: const Color.fromARGB(255, 255, 255, 255)))),
-                onCompleted: (pin) => debugPrint(pin),
+              Form(
+                key: formkey,
+                child: Pinput(
+                  controller: otpController,
+                  length: 6,
+                  defaultPinTheme: PinTheme(
+                      width: 56,
+                      height: 68,
+                      textStyle: TextStyle(fontSize: 22, color: Colors.black),
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.transparent))),
+                  focusedPinTheme: defaultPinTheme.copyWith(
+                      decoration: defaultPinTheme.decoration!.copyWith(
+                          border: Border.all(
+                              color:
+                                  const Color.fromARGB(255, 255, 255, 255)))),
+                  onCompleted: (pin) => debugPrint(pin),
+                  validator: (value) {
+                    if (value == null || value.isEmpty || value.length != 6) {
+                      return "enter the 6 digit otp";
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
               ),
-               SizedBox(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: GestureDetector(
-                  onTap: (){},
+                  onTap: () {
+                    if (formkey.currentState!.validate()) {
+                      if (otpController.text.isNotEmpty) {
+                        MobileControllers.verifyOtp(
+                            context, otpController.text, verificationId!);
+                      }
+                    }
+                  },
                   child: Container(
                     child: const Text('verify'),
                     width: double.infinity,
@@ -94,4 +122,8 @@ class OtpScreen extends StatelessWidget {
       ),
     );
   }
+
+  // void verfyOtp(BuildContext context,String userOtp){
+  //   final data=Provider.of
+  // }
 }

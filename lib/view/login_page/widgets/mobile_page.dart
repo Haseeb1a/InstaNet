@@ -35,6 +35,7 @@ class Mobilepage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: ListView(
           children: [
+            
             const SizedBox(
               height: 10,
             ),
@@ -105,12 +106,8 @@ class Mobilepage extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 if (formkey.currentState!.validate()) {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => OtpScreen(
-                                mobilenumber:mobileController.numbercontroller.text.toString(),
-                              )));
+                  mobileController.loginWithPhone(
+                                  context, mobileController.numbercontroller.text);
                 }
               },
               child: Container(
