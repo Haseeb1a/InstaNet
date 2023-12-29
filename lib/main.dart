@@ -45,12 +45,14 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => LikeAnimationProvider()),
           ChangeNotifierProvider(create: (context) => MobileController()),
           ChangeNotifierProvider(create: (context) => Userinfomation()),
+
+          
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'intagram clone',
             theme: ThemeData.dark().copyWith(
-              
+
               scaffoldBackgroundColor: mobileBackgroundColor,
             ),
             home: const AuthGate()));
