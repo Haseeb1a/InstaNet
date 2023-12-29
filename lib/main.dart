@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'intagram clone',
             theme: ThemeData.dark().copyWith(
+              
               scaffoldBackgroundColor: mobileBackgroundColor,
             ),
             home: const AuthGate()));

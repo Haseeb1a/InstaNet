@@ -13,7 +13,6 @@ import 'package:instanet/view/widgets/show_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MobileController extends ChangeNotifier {
-  
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
@@ -153,7 +152,10 @@ class MobileController extends ChangeNotifier {
         notifyListeners();
       });
     } on FirebaseAuthException catch (e) {
-      showSnackBar(e.message.toString(),context, );
+      showSnackBar(
+        e.message.toString(),
+        context,
+      );
       _isLoading = false;
       notifyListeners();
     }
@@ -179,12 +181,13 @@ class MobileController extends ChangeNotifier {
   }
 
   // upload the data to SharedPreferences
- Future saveUserDataToSP() async {
+  Future saveUserDataToSP() async {
     SharedPreferences sharedPref = await SharedPreferences.getInstance();
     await sharedPref.setString("user_model", jsonEncode(userModel.tojson()));
   }
+
   // set to  the userset
- Future setSignIn() async {
+  Future setSignIn() async {
     final SharedPreferences sharedPref = await SharedPreferences.getInstance();
     sharedPref.setBool("is_signedin", true);
     _isSignedIn = true;

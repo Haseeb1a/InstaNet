@@ -93,4 +93,47 @@ class Userinfomation extends ChangeNotifier {
       showSnackBar('please uplod your profilephoto', context);
     }
   }
+
+   void verifyOtp(BuildContext context, String userOtp,  String verificationId) {
+    // final data = Provider.of<MobileController>(context, listen: false);
+    mobileControllers.verifyOtps(
+      
+      context: context,
+      verifcationId: verificationId!,
+      // verificationId: widget.verificationId,
+      userOtp: userOtp,
+      onSuccess: () {
+        // checking whether user exists in the db
+        mobileControllers.checkExithingUser().then(
+          (value) async {
+            if (value == true) {
+              print('user exiting the app  yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
+              // user exists in our app
+              mobileControllers.getDataFromFirebase().then(
+                    (value) => mobileControllers.saveUserDataToSP().then(
+                          (value) => mobileControllers.setSignIn().then(
+                                (value) => Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MobileScreenLayout(),
+                                    ),
+                                    (route) => false),
+                              ),
+                        ),
+                  );
+            } else {
+               print('user exiting the app  oooooooooooooooooooooooooooooooooooooooooooooooo');
+              // new user
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const UserInformationScreen()),
+                  (route) => false);
+            }
+          },
+        );
+      },
+    );
+  }
+
 }

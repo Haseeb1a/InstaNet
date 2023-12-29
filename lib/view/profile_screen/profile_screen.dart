@@ -19,10 +19,10 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pofiledata = Provider.of<ProfileController>(context, listen: false);
-    Provider.of<ProfileController>(context, listen: false).getPosts(FirebaseAuth.instance.currentUser!.uid);
+    Provider.of<ProfileController>(context, listen: false).getPosts(uid);
     Provider.of<ProfileController>(
       context,
-    ).getData(FirebaseAuth.instance.currentUser!.uid, context);
+    ).getData(uid, context);
     print('tttttttttttttt$uid');
 
     return pofiledata.userData.isEmpty
